@@ -5,6 +5,10 @@ import 'dart:typed_data';
 import '../http.dart';
 import '../multipart/form_data.dart';
 
+/// Represents an HTTP request.
+///
+/// This class encapsulates details of an HTTP request, including the request method,
+/// URL, headers, body, and other relevant properties.
 class Request<T> {
   /// Headers attach to this [Request]
   final Map<String, String> headers;
@@ -12,14 +16,17 @@ class Request<T> {
   /// The [Uri] from request
   final Uri url;
 
+  /// The decoder function for decoding the response body.
   final Decoder<T>? decoder;
 
+  /// The interceptor function for processing the response before decoding.
   final ResponseInterceptor<T>? responseInterceptor;
 
   /// The Http Method from this [Request]
   /// ex: `GET`,`POST`,`PUT`,`DELETE`
   final String method;
 
+  /// The content length of the request body.
   final int? contentLength;
 
   /// The BodyBytesStream of body from this [Request]
@@ -31,8 +38,10 @@ class Request<T> {
   /// The maximum number of redirects if [followRedirects] is true.
   final int maxRedirects;
 
+  /// Indicates whether the connection should be kept alive.
   final bool persistentConnection;
 
+  /// The form data associated with the request, if any.
   final FormData? files;
 
   const Request._({
@@ -49,6 +58,7 @@ class Request<T> {
     this.responseInterceptor,
   });
 
+  /// Constructs a new [Request] instance.
   factory Request({
     required Uri url,
     required String method,
@@ -79,6 +89,7 @@ class Request<T> {
         responseInterceptor: responseInterceptor);
   }
 
+  /// Creates a copy of this [Request] with the specified changes.
   Request<T> copyWith({
     Uri? url,
     String? method,
@@ -113,11 +124,15 @@ class Request<T> {
   }
 }
 
+/// Extension methods for [List<int>] to convert it into a stream.
 extension StreamExt on List<int> {
+  /// Converts a [List<int>] into a broadcast stream of bytes.
   Stream<List<int>> toStream() => Stream.value(this).asBroadcastStream();
 }
 
+/// Extension methods for [Stream<List<int>>] for byte conversion.
 extension BodyBytesStream on Stream<List<int>> {
+  /// Converts a stream of bytes into a byte array.
   Future<Uint8List> toBytes() {
     var completer = Completer<Uint8List>();
     var sink = ByteConversionSink.withCallback(
@@ -132,6 +147,7 @@ extension BodyBytesStream on Stream<List<int>> {
     return completer.future;
   }
 
+  /// Converts a stream of bytes into a string using the specified encoding.
   Future<String> bytesToString([Encoding encoding = utf8]) =>
       encoding.decodeStream(this);
 }

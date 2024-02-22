@@ -13,10 +13,17 @@ export 'http/src/multipart/multipart_file.dart';
 export 'http/src/response/response.dart';
 export 'sockets/sockets.dart';
 
+/// Interface defining methods for making HTTP requests and WebSocket connections.
+///
+/// This interface provides a set of abstract methods for performing various HTTP
+/// operations such as GET, POST, PUT, DELETE, PATCH, as well as executing GraphQL
+/// queries and mutations. Additionally, it includes a method for establishing WebSocket
+/// connections.
 abstract class GetConnectInterface with GetLifeCycleMixin {
   List<GetSocket>? sockets;
   GetHttpClient get httpClient;
 
+  /// Performs a GET request.
   Future<Response<T>> get<T>(
     String url, {
     Map<String, String>? headers,
@@ -25,6 +32,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
     Decoder<T>? decoder,
   });
 
+  /// Makes a generic HTTP request.
   Future<Response<T>> request<T>(
     String url,
     String method, {
@@ -35,6 +43,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
     Decoder<T>? decoder,
   });
 
+  /// Sends a POST request.
   Future<Response<T>> post<T>(
     String url,
     dynamic body, {
@@ -44,6 +53,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
     Decoder<T>? decoder,
   });
 
+  /// Executes a PUT request.
   Future<Response<T>> put<T>(
     String url,
     dynamic body, {
@@ -53,6 +63,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
     Decoder<T>? decoder,
   });
 
+  /// Sends a DELETE request.
   Future<Response<T>> delete<T>(
     String url, {
     Map<String, String>? headers,
@@ -61,6 +72,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
     Decoder<T>? decoder,
   });
 
+  /// Executes a PATCH request.
   Future<Response<T>> patch<T>(
     String url,
     dynamic body, {
@@ -71,6 +83,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
     Progress? uploadProgress,
   });
 
+  /// Executes a GraphQL query.
   Future<GraphQLResponse<T>> query<T>(
     String query, {
     String? url,
@@ -78,6 +91,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
     Map<String, String>? headers,
   });
 
+  /// Executes a GraphQL mutation.
   Future<GraphQLResponse<T>> mutation<T>(
     String mutation, {
     String? url,
@@ -85,6 +99,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
     Map<String, String>? headers,
   });
 
+  /// Establishes a WebSocket connection.
   GetSocket socket(
     String url, {
     Duration ping = const Duration(seconds: 5),

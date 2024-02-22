@@ -5,11 +5,23 @@ import '../exceptions/exceptions.dart';
 import '../request/request.dart';
 import '../status/http_status.dart';
 
+/// Represents a response from a GraphQL operation.
+///
+/// This class extends [Response] and adds an additional field, [graphQLErrors],
+/// to handle errors specific to GraphQL queries or mutations.
 class GraphQLResponse<T> extends Response<T> {
+  /// List of GraphQL errors returned in the response.
   final List<GraphQLError>? graphQLErrors;
 
+  /// Constructs a new [GraphQLResponse] instance.
+  ///
+  /// The [graphQLErrors] parameter represents any errors returned by the GraphQL server.
   GraphQLResponse({super.body, this.graphQLErrors});
 
+  /// Constructs a [GraphQLResponse] from an existing [Response] instance.
+  ///
+  /// This constructor initializes [graphQLErrors] as null and copies relevant fields
+  /// from the provided [res]ponse.
   GraphQLResponse.fromResponse(Response res)
       : graphQLErrors = null,
         super(
@@ -22,6 +34,10 @@ class GraphQLResponse<T> extends Response<T> {
             body: res.body['data'] as T?);
 }
 
+/// Represents an HTTP response.
+///
+/// This class encapsulates details of an HTTP response, including the status code,
+/// headers, body, and other relevant properties.
 class Response<T> {
   const Response({
     this.request,
@@ -93,6 +109,7 @@ class Response<T> {
   final T? body;
 }
 
+/// Converts a stream of bytes into a string using the specified encoding.
 Future<String> bodyBytesToString(
     Stream<List<int>> bodyBytes, Map<String, String> headers) {
   return bodyBytes.bytesToString(_encodingForHeaders(headers));
@@ -123,6 +140,9 @@ HeaderValue _contentTypeForHeaders(Map<String, String> headers) {
   return HeaderValue('application/octet-stream');
 }
 
+/// Represents a parsed header value.
+///
+/// This class provides methods to parse and manipulate header values.
 class HeaderValue {
   String _value;
   Map<String, String?>? _parameters;

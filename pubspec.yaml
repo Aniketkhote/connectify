@@ -1,7 +1,7 @@
 name: refreshed_connect
-description: "A new Flutter package project."
+description: "RefreshedConnect is Lightweight HTTP request management package"
 version: 1.0.0
-homepage: null
+repository: "https://github.com/Aniketkhote/refreshed_connect"
 
 environment:
   sdk: ">=3.2.6 <4.0.0"

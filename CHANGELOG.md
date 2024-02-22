@@ -1,3 +1,5 @@
-## 0.0.1
+## 1.0.0
 
-* TODO: Describe initial release.
+- Initial release as RefreshedConnect, extracted from refreshed.
+- Lightweight package optimized for HTTP request management in Flutter applications.
+- Offers streamlined network interactions and enhanced performance.
