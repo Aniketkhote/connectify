@@ -1,13 +1,13 @@
 import 'package:refreshed/get_instance/get_instance.dart';
 
+import 'http/http.dart';
 import 'http/src/certificates/certificates.dart';
 import 'http/src/exceptions/exceptions.dart';
-import 'http/src/http.dart';
 import 'http/src/response/response.dart';
 import 'sockets/sockets.dart';
 
+export 'http/http.dart';
 export 'http/src/certificates/certificates.dart';
-export 'http/src/http.dart';
 export 'http/src/multipart/form_data.dart';
 export 'http/src/multipart/multipart_file.dart';
 export 'http/src/response/response.dart';

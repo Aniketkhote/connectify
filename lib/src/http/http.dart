@@ -2,15 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import '../src/certificates/certificates.dart';
-import '../src/exceptions/exceptions.dart';
-import '../src/multipart/form_data.dart';
-import '../src/request/request.dart';
-import '../src/response/response.dart';
-import '../src/status/http_status.dart';
-import 'http/interface/request_base.dart';
-import 'http/request/http_request.dart';
-import 'interceptors/get_modifiers.dart';
+import 'src/certificates/certificates.dart';
+import 'src/exceptions/exceptions.dart';
+import 'src/http/interface/request_base.dart';
+import 'src/http/request/http_request.dart';
+import 'src/interceptors/get_modifiers.dart';
+import 'src/multipart/form_data.dart';
+import 'src/request/request.dart';
+import 'src/response/response.dart';
+import 'src/status/http_status.dart';
 
 typedef Decoder<T> = T Function(dynamic data);
 

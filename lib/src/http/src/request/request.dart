@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import '../http.dart';
+import '../../http.dart';
 import '../multipart/form_data.dart';
 
 /// Represents an HTTP request.

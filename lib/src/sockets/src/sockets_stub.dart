@@ -1,4 +1,4 @@
-import './socket_notifier.dart';
+import 'socket_notifier.dart';
 
 /// Base class for WebSocket implementation.
 ///
