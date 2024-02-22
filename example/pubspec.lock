@@ -41,6 +41,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
+  connectify:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "1.0.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -148,17 +155,10 @@ packages:
     dependency: transitive
     description:
       name: refreshed
-      sha256: c8e67ebbe57eee16d4750192ff0dc698646c135d7d05c1dfe25189d974121e44
+      sha256: "32167b21bef46c01066ee373bc9fa67f1bf3593fe9f033c76d6417baeac4a2f9"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
-  refreshed_connect:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "1.0.0"
+    version: "1.4.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -230,4 +230,3 @@ packages:
     version: "13.0.0"
 sdks:
   dart: ">=3.2.6 <4.0.0"
-  flutter: ">=1.17.0"

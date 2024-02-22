@@ -1,7 +1,7 @@
-name: refreshed_connect
-description: "RefreshedConnect is Lightweight HTTP request management package"
+name: connectify
+description: "connectify is Lightweight HTTP request management package"
 version: 1.0.0
-repository: "https://github.com/Aniketkhote/refreshed_connect"
+repository: "https://github.com/Aniketkhote/connectify"
 
 environment:
   sdk: ">=3.2.6 <4.0.0"
