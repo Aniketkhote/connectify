@@ -2,16 +2,25 @@
 
 import 'dart:convert';
 
+/// Checks if the given [byte] represents a valid token character according to the HTTP specification.
+///
+/// Token characters are defined as bytes with values greater than 31 and less than 128,
+/// excluding characters listed in [SEPARATOR_MAP].
 bool isTokenChar(int byte) {
   return byte > 31 && byte < 128 && !SEPARATOR_MAP[byte];
 }
 
+/// Checks if the given [byte] represents a valid value character according to the HTTP specification.
+///
+/// Value characters include bytes with values greater than 31 and less than 128,
+/// as well as specific bytes for space (SP) and horizontal tab (HT).
 bool isValueChar(int byte) {
   return (byte > 31 && byte < 128) ||
       (byte == CharCode.SP) ||
       (byte == CharCode.HT);
 }
 
+/// Provides constants representing ASCII character codes.
 class CharCode {
   static const int HT = 9;
   static const int LF = 10;

@@ -3,7 +3,9 @@ import '../http/stub/file_decoder_stub.dart'
     if (dart.library.io) '../http/io/file_decoder_io.dart';
 import '../request/request.dart';
 
+/// Represents a file to be uploaded as part of a multipart request.
 class MultipartFile {
+  /// Creates a [MultipartFile] object.
   MultipartFile(
     dynamic data, {
     required this.filename,

@@ -12,14 +12,25 @@ import 'src/request/request.dart';
 import 'src/response/response.dart';
 import 'src/status/http_status.dart';
 
+/// Defines a decoder function to convert dynamic data into type T.
 typedef Decoder<T> = T Function(dynamic data);
 
+/// Represents a progress function that takes a double value indicating the progress percentage.
 typedef Progress = Function(double percent);
 
+/// Represents a response interceptor function that intercepts and potentially modifies
+/// the response before it's processed.
 typedef ResponseInterceptor<T> = Future<Response<T>?> Function(
     Request<T> request, Type targetType, HttpClientResponse response);
 
+/// A customizable HTTP client for making HTTP requests.
+///
+/// Use the [GetHttpClient] class to configure and send HTTP requests.
+/// You can customize various aspects of the HTTP requests, such as user agent,
+/// timeout, follow redirects, authentication, request and response modifiers,
+/// and more.
 class GetHttpClient {
+  /// Creates a new instance of [GetHttpClient].
   GetHttpClient({
     this.userAgent = 'getx-client',
     this.timeout = const Duration(seconds: 8),
@@ -42,23 +53,35 @@ class GetHttpClient {
               findProxy: findProxy,
             ),
         _modifier = GetModifier();
+
+  /// The user agent string to be sent with the requests.
   String userAgent;
+
+  /// The base URL used for constructing request URLs.
   String? baseUrl;
 
-  String defaultContentType = 'application/json; charset=utf-8';
-
-  bool followRedirects;
-  int maxRedirects;
-  int maxAuthRetries;
-
-  bool sendUserAgent;
-  bool sendContentLength;
-
-  Decoder? defaultDecoder;
-  ResponseInterceptor? defaultResponseInterceptor;
-
+  /// The duration before an HTTP request times out.
   Duration timeout;
 
+  /// Whether to automatically follow redirects.
+  bool followRedirects;
+
+  /// The maximum number of redirects to follow.
+  int maxRedirects;
+
+  /// The maximum number of authentication retries.
+  int maxAuthRetries;
+
+  /// Whether to send the user agent header with requests.
+  bool sendUserAgent;
+
+  /// Whether to send the content length header with requests.
+  bool sendContentLength;
+
+  /// Whether to handle errors safely.
+  ///
+  /// If set to true, exceptions during requests will not throw errors but
+  /// will return a response with an error message instead. Default is true.
   bool errorSafety = true;
 
   final IClient _httpClient;
@@ -67,26 +90,50 @@ class GetHttpClient {
 
   String Function(Uri url)? findProxy;
 
+  String defaultContentType = 'application/json; charset=utf-8';
+
+  Decoder? defaultDecoder;
+  ResponseInterceptor? defaultResponseInterceptor;
+
+  /// Adds an authenticator for the HTTP requests.
+  ///
+  /// The [auth] parameter should be an instance of [RequestModifier] for authentication.
   void addAuthenticator<T>(RequestModifier<T> auth) {
     _modifier.authenticator = auth as RequestModifier;
   }
 
+  /// Adds a request modifier for the HTTP requests.
+  ///
+  /// The [interceptor] parameter should be an instance of [RequestModifier] for request modifications.
   void addRequestModifier<T>(RequestModifier<T> interceptor) {
     _modifier.addRequestModifier<T>(interceptor);
   }
 
+  /// Removes a request modifier from the HTTP client.
+  ///
+  /// The [interceptor] parameter should be the same instance previously added using [addRequestModifier].
   void removeRequestModifier<T>(RequestModifier<T> interceptor) {
     _modifier.removeRequestModifier(interceptor);
   }
 
+  /// Adds a response modifier for the HTTP responses.
+  ///
+  /// The [interceptor] parameter should be an instance of [ResponseModifier] for response modifications.
   void addResponseModifier<T>(ResponseModifier<T> interceptor) {
     _modifier.addResponseModifier(interceptor);
   }
 
+  /// Removes a response modifier from the HTTP client.
+  ///
+  /// The [interceptor] parameter should be the same instance previously added using [addResponseModifier].
   void removeResponseModifier<T>(ResponseModifier<T> interceptor) {
     _modifier.removeResponseModifier<T>(interceptor);
   }
 
+  /// Creates a URI object with the specified URL and query parameters.
+  ///
+  /// If a [baseUrl] is provided, the URL is appended to it. The [query] parameter
+  /// contains key-value pairs for query parameters.
   Uri createUri(String? url, Map<String, dynamic>? query) {
     if (baseUrl != null) {
       url = baseUrl! + url!;
@@ -346,6 +393,17 @@ class GetHttpClient {
     );
   }
 
+  /// Sends an HTTP request.
+  ///
+  /// This method sends the specified [request] and returns a [Future] that resolves
+  /// to a [Response] object containing the result of the request.
+  ///
+  /// The [request] parameter should be an instance of [Request] with the desired
+  /// configuration for the HTTP request.
+  ///
+  /// If an error occurs during the request and the `errorSafety` flag is not set,
+  /// it throws a [GetHttpException]. Otherwise, it returns a [Response] object with
+  /// an error message.
   Future<Response<T>> send<T>(Request<T> request) async {
     try {
       final Response<T> response =
@@ -361,6 +419,12 @@ class GetHttpClient {
     }
   }
 
+  /// Performs an HTTP PATCH request.
+  ///
+  /// This method sends an HTTP PATCH request to the specified [url] with optional [body],
+  /// [contentType], [headers], [query], [decoder], [responseInterceptor], and [uploadProgress].
+  ///
+  /// Returns a [Future] that resolves to a [Response] object containing the result of the request.
   Future<Response<T>> patch<T>(
     String url, {
     dynamic body,
@@ -370,7 +434,6 @@ class GetHttpClient {
     Decoder<T>? decoder,
     ResponseInterceptor<T>? responseInterceptor,
     Progress? uploadProgress,
-    // List<MultipartFile> files,
   }) async {
     try {
       final Response<T> response = await _performRequest<T>(
@@ -397,6 +460,12 @@ class GetHttpClient {
     }
   }
 
+  /// Performs an HTTP POST request.
+  ///
+  /// This method sends an HTTP POST request to the specified [url] with optional [body],
+  /// [contentType], [headers], [query], [decoder], [responseInterceptor], and [uploadProgress].
+  ///
+  /// Returns a [Future] that resolves to a [Response] object containing the result of the request.
   Future<Response<T>> post<T>(
     String? url, {
     dynamic body,
@@ -406,7 +475,6 @@ class GetHttpClient {
     Decoder<T>? decoder,
     ResponseInterceptor<T>? responseInterceptor,
     Progress? uploadProgress,
-    // List<MultipartFile> files,
   }) async {
     try {
       final Response<T> response = await _performRequest<T>(
@@ -433,6 +501,13 @@ class GetHttpClient {
     }
   }
 
+  /// Performs an HTTP request with the specified [method].
+  ///
+  /// This method sends an HTTP request with the specified [method] to the specified [url]
+  /// with optional [body], [contentType], [headers], [query], [decoder], [responseInterceptor],
+  /// and [uploadProgress].
+  ///
+  /// Returns a [Future] that resolves to a [Response] object containing the result of the request.
   Future<Response<T>> request<T>(
     String url,
     String method, {
@@ -469,6 +544,12 @@ class GetHttpClient {
     }
   }
 
+  /// Performs an HTTP PUT request.
+  ///
+  /// This method sends an HTTP PUT request to the specified [url] with optional [body],
+  /// [contentType], [headers], [query], [decoder], [responseInterceptor], and [uploadProgress].
+  ///
+  /// Returns a [Future] that resolves to a [Response] object containing the result of the request.
   Future<Response<T>> put<T>(
     String url, {
     dynamic body,
@@ -504,6 +585,12 @@ class GetHttpClient {
     }
   }
 
+  /// Performs an HTTP GET request.
+  ///
+  /// This method sends an HTTP GET request to the specified [url] with optional [headers],
+  /// [contentType], [query], [decoder], and [responseInterceptor].
+  ///
+  /// Returns a [Future] that resolves to a [Response] object containing the result of the request.
   Future<Response<T>> get<T>(
     String url, {
     Map<String, String>? headers,
@@ -528,6 +615,12 @@ class GetHttpClient {
     }
   }
 
+  /// Performs an HTTP DELETE request.
+  ///
+  /// This method sends an HTTP DELETE request to the specified [url] with optional [headers],
+  /// [contentType], [query], [decoder], and [responseInterceptor].
+  ///
+  /// Returns a [Future] that resolves to a [Response] object containing the result of the request.
   Future<Response<T>> delete<T>(String url,
       {Map<String, String>? headers,
       String? contentType,
@@ -551,6 +644,7 @@ class GetHttpClient {
     }
   }
 
+  /// Closes the underlying HTTP client connection.
   void close() {
     _httpClient.close();
   }

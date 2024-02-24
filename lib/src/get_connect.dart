@@ -106,7 +106,18 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
   });
 }
 
+/// A class for managing HTTP connections.
 class GetConnect extends GetConnectInterface {
+  /// Constructs a new [GetConnect] instance with default configurations.
+  ///
+  /// [userAgent] sets the user agent string for HTTP requests.
+  /// [timeout] sets the maximum duration to wait for a response.
+  /// [followRedirects] determines whether to follow HTTP redirects.
+  /// [maxRedirects] sets the maximum number of HTTP redirects to follow.
+  /// [sendUserAgent] determines whether to send the user agent string in requests.
+  /// [maxAuthRetries] sets the maximum number of authentication retries.
+  /// [allowAutoSignedCert] determines whether to allow automatically signed certificates.
+  /// [withCredentials] determines whether to include credentials in cross-origin requests.
   GetConnect({
     this.userAgent = 'getx-client',
     this.timeout = const Duration(seconds: 5),
@@ -118,20 +129,46 @@ class GetConnect extends GetConnectInterface {
     this.withCredentials = false,
   });
 
-  bool allowAutoSignedCert;
+  /// The user agent string for HTTP requests.
   String userAgent;
+
+  /// Determines whether to send the user agent string in requests.
   bool sendUserAgent;
+
+  /// The base URL for HTTP requests.
   String? baseUrl;
+
+  /// The default content type for HTTP requests.
   String defaultContentType = 'application/json; charset=utf-8';
+
+  /// Determines whether to follow HTTP redirects.
   bool followRedirects;
+
+  /// The maximum number of HTTP redirects to follow.
   int maxRedirects;
+
+  /// The maximum number of authentication retries.
   int maxAuthRetries;
-  Decoder? defaultDecoder;
+
+  /// The maximum duration to wait for a response.
   Duration timeout;
+
+  /// The list of trusted certificates for secure connections.
   List<TrustedCertificate>? trustedCertificates;
+
+  /// A function that finds a proxy for a given URL.
   String Function(Uri url)? findProxy;
+
+  /// The HTTP client used for making requests.
   GetHttpClient? _httpClient;
+
+  /// The list of sockets associated with the connection.
   List<GetSocket>? _sockets;
+
+  /// Determines whether to allow automatically signed certificates.
+  bool allowAutoSignedCert;
+
+  /// Determines whether to include credentials in cross-origin requests.
   bool withCredentials;
 
   @override
@@ -386,16 +423,22 @@ class GetConnect extends GetConnectInterface {
     }
   }
 
+  /// A flag indicating whether the connection is disposed.
   bool _isDisposed = false;
 
+  /// Returns `true` if the connection is disposed, otherwise `false`.
   bool get isDisposed => _isDisposed;
 
+  /// Throws an exception if the connection is disposed.
+  ///
+  /// [isHttp] specifies whether the check is for an HTTP client.
   void _checkIfDisposed({bool isHttp = true}) {
     if (_isDisposed) {
-      throw Exception('Can not emit events to disposed clients');
+      throw Exception('Cannot emit events to disposed clients');
     }
   }
 
+  /// Disposes of the connection by closing sockets and the HTTP client.
   void dispose() {
     if (_sockets != null) {
       for (final GetSocket socket in sockets) {

@@ -1,6 +1,6 @@
 name: connectify
-description: "connectify is Lightweight HTTP request management package"
-version: 1.0.0
+description: "Connectify is a specialized Flutter package for managing HTTP requests with ease and efficiency."
+version: 1.1.0
 repository: "https://github.com/Aniketkhote/connectify"
 
 environment:
@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  refreshed: ^1.4.0
+  refreshed: ^1.5.0
 
 dev_dependencies:
   flutter_lints: ^3.0.1

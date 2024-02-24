@@ -4,6 +4,18 @@ import 'package:refreshed/refreshed.dart';
 
 import '../../request/request.dart';
 
+/// Decodes the response body based on the provided request and MIME type.
+///
+/// [request]: The request containing information about the expected type of the response body.
+/// [stringBody]: The raw string representation of the response body.
+/// [mimeType]: The MIME type of the response body.
+///
+/// Returns the decoded body of type [T] or `null` if the body is empty.
+///
+/// The decoding process is determined by the MIME type. If the MIME type contains 'application/json',
+/// the string body is decoded as JSON. If decoding fails, the raw string body is used.
+/// If no decoder is provided in the request or decoding fails, the raw string body is returned.
+/// If an exception occurs during decoding, the raw string body is returned.
 T? bodyDecoded<T>(Request<T> request, String stringBody, String? mimeType) {
   T? body;
   dynamic bodyToDecode;
