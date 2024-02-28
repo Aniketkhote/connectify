@@ -96,9 +96,3 @@ class HttpRequestImpl extends IClient {
     }
   }
 }
-
-// extension FileExt on io.FileSystemEntity {
-//   String get fileName {
-//     return this?.path?.split(io.Platform.pathSeparator)?.last;
-//   }
-// }

@@ -1,3 +1,8 @@
+## 1.1.1
+
+- Fixed pub points
+- Minor fixes and improvements
+
 ## 1.1.0
 
 - Improved code readability and maintainability through the addition of comprehensive documentation comments.

@@ -1,15 +1,16 @@
 name: connectify
 description: "Connectify is a specialized Flutter package for managing HTTP requests with ease and efficiency."
-version: 1.1.0
+version: 1.1.1
 repository: "https://github.com/Aniketkhote/connectify"
 
 environment:
   sdk: ">=3.2.6 <4.0.0"
+  flutter: ">=3.16.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  refreshed: ^1.5.0
+  refreshed: ^1.5.1
 
 dev_dependencies:
   flutter_lints: ^3.0.1

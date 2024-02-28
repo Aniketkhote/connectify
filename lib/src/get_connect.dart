@@ -119,7 +119,7 @@ class GetConnect extends GetConnectInterface {
   /// [allowAutoSignedCert] determines whether to allow automatically signed certificates.
   /// [withCredentials] determines whether to include credentials in cross-origin requests.
   GetConnect({
-    this.userAgent = 'getx-client',
+    this.userAgent = 'connectify-client',
     this.timeout = const Duration(seconds: 5),
     this.followRedirects = true,
     this.maxRedirects = 5,
@@ -440,17 +440,11 @@ class GetConnect extends GetConnectInterface {
 
   /// Disposes of the connection by closing sockets and the HTTP client.
   void dispose() {
-    if (_sockets != null) {
-      for (final GetSocket socket in sockets) {
-        socket.close();
-      }
-      _sockets?.clear();
-      sockets = null;
-    }
-    if (_httpClient != null) {
-      httpClient.close();
-      _httpClient = null;
-    }
+    _sockets?.forEach((socket) => socket.close());
+    _sockets?.clear();
+    sockets = null;
+    _httpClient?.close();
+    _httpClient = null;
     _isDisposed = true;
   }
 }

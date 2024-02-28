@@ -32,7 +32,7 @@ typedef ResponseInterceptor<T> = Future<Response<T>?> Function(
 class GetHttpClient {
   /// Creates a new instance of [GetHttpClient].
   GetHttpClient({
-    this.userAgent = 'getx-client',
+    this.userAgent = 'connectify-client',
     this.timeout = const Duration(seconds: 8),
     this.followRedirects = true,
     this.maxRedirects = 5,
