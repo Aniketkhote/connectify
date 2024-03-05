@@ -1,3 +1,7 @@
+## 1.1.2
+
+- Refreshed upgraded to 1.5.4
+
 ## 1.1.1
 
 - Fixed pub points
