@@ -1,7 +1,7 @@
-import 'dart:async';
+import "dart:async";
 
-import '../request/request.dart';
-import '../response/response.dart';
+import "package:connectify/src/http/src/request/request.dart";
+import "package:connectify/src/http/src/response/response.dart";
 
 /// Signature for a function that modifies an HTTP request.
 ///
@@ -13,7 +13,7 @@ typedef RequestModifier<T> = FutureOr<Request<T>> Function(Request<T?> request);
 /// The function takes a [Request] object and the corresponding [Response] object,
 /// and returns a modified [Response] object.
 typedef ResponseModifier<T> = FutureOr<Response<T>> Function(
-    Request<T?> request, Response<T?> response);
+    Request<T?> request, Response<T?> response,);
 
 /// Signature for a function that executes a handler.
 ///
@@ -67,7 +67,7 @@ class GetModifier<S> {
   ///
   /// Returns the modified [Response] object.
   Future<Response<T>> modifyResponse<T>(
-      Request<T> request, Response<T> response) async {
+      Request<T> request, Response<T> response,) async {
     var newResponse = response;
     if (_responseModifiers.isNotEmpty) {
       for (var interceptor in _responseModifiers) {

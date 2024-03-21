@@ -1,13 +1,13 @@
-import 'dart:async';
+import "dart:async";
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
+import "dart:html";
 
-import '../../certificates/certificates.dart';
-import '../../exceptions/exceptions.dart';
-import '../../request/request.dart';
-import '../../response/response.dart';
-import '../interface/request_base.dart';
-import '../utils/body_decoder.dart';
+import "package:connectify/src/http/src/certificates/certificates.dart";
+import "package:connectify/src/http/src/exceptions/exceptions.dart";
+import "package:connectify/src/http/src/http/interface/request_base.dart";
+import "package:connectify/src/http/src/http/utils/body_decoder.dart";
+import "package:connectify/src/http/src/request/request.dart";
+import "package:connectify/src/http/src/response/response.dart";
 
 /// A `dart:html` implementation of `IClient`.
 class HttpRequestImpl implements IClient {
@@ -36,12 +36,12 @@ class HttpRequestImpl implements IClient {
 
     xhr = HttpRequest()
       ..timeout = timeout?.inMilliseconds
-      ..open(request.method, '${request.url}', async: true); // check this
+      ..open(request.method, "${request.url}", async: true); // check this
 
     _xhrs.add(xhr);
 
     xhr
-      ..responseType = 'blob'
+      ..responseType = "blob"
       ..withCredentials = withCredentials;
     request.headers.forEach(xhr.setRequestHeader);
 
@@ -54,7 +54,7 @@ class HttpRequestImpl implements IClient {
         var bodyBytes = (reader.result as List<int>).toStream();
 
         if (request.responseInterceptor != null) {
-          throw 'response interception not implemented for web yet!';
+          throw "response interception not implemented for web yet!";
         }
 
         /*
@@ -73,10 +73,10 @@ class HttpRequestImpl implements IClient {
 
         String? contentType;
 
-        if (xhr.responseHeaders.containsKey('content-type')) {
-          contentType = xhr.responseHeaders['content-type'];
+        if (xhr.responseHeaders.containsKey("content-type")) {
+          contentType = xhr.responseHeaders["content-type"];
         } else {
-          contentType = 'application/json';
+          contentType = "application/json";
         }
         // xhr.responseHeaders.containsKey(key)
         final body = bodyDecoded<T>(
@@ -109,8 +109,8 @@ class HttpRequestImpl implements IClient {
 
     xhr.onError.first.then((_) {
       completer.completeError(
-          GetHttpException('XMLHttpRequest error.', request.url),
-          StackTrace.current);
+          GetHttpException("XMLHttpRequest error.", request.url),
+          StackTrace.current,);
     });
 
     xhr.send(bytes);

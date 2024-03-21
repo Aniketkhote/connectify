@@ -1,17 +1,15 @@
-import 'dart:async';
-import 'dart:io' as io;
+import "dart:async";
+import "dart:io" as io;
 
-import '../../certificates/certificates.dart';
-import '../../exceptions/exceptions.dart';
-import '../../request/request.dart';
-import '../../response/response.dart';
-import '../interface/request_base.dart';
-import '../utils/body_decoder.dart';
+import "package:connectify/src/http/src/certificates/certificates.dart";
+import "package:connectify/src/http/src/exceptions/exceptions.dart";
+import "package:connectify/src/http/src/http/interface/request_base.dart";
+import "package:connectify/src/http/src/http/utils/body_decoder.dart";
+import "package:connectify/src/http/src/request/request.dart";
+import "package:connectify/src/http/src/response/response.dart";
 
 /// A `dart:io` implementation of `IClient`.
 class HttpRequestImpl extends IClient {
-  io.HttpClient? _httpClient;
-  io.SecurityContext? _securityContext;
 
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
@@ -32,6 +30,8 @@ class HttpRequestImpl extends IClient {
     _httpClient!.badCertificateCallback = (_, __, ___) => allowAutoSignedCert;
     _httpClient!.findProxy = findProxy;
   }
+  io.HttpClient? _httpClient;
+  io.SecurityContext? _securityContext;
 
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
@@ -53,7 +53,7 @@ class HttpRequestImpl extends IClient {
 
       var headers = <String, String>{};
       response.headers.forEach((key, values) {
-        headers[key] = values.join(',');
+        headers[key] = values.join(",");
       });
 
       final bodyBytes = (response);

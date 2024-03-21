@@ -1,10 +1,10 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
+import "dart:async";
+import "dart:convert";
+import "dart:math";
 
-import '../request/request.dart';
-import '../utils/utils.dart';
-import 'multipart_file.dart';
+import "package:connectify/src/http/src/multipart/multipart_file.dart";
+import "package:connectify/src/http/src/request/request.dart";
+import "package:connectify/src/http/src/utils/utils.dart";
 
 class FormData {
   FormData(Map<String, dynamic> map) : boundary = _getBoundary() {
@@ -28,7 +28,7 @@ class FormData {
     final newRandom = Random();
     var list = List<int>.generate(_maxBoundaryLength - GET_BOUNDARY.length,
         (_) => boundaryCharacters[newRandom.nextInt(boundaryCharacters.length)],
-        growable: false);
+        growable: false,);
     return '$GET_BOUNDARY${String.fromCharCodes(list)}';
   }
 
@@ -46,11 +46,11 @@ class FormData {
     var header =
         'content-disposition: form-data; name="${browserEncode(name)}"';
     if (!isPlainAscii(value)) {
-      header = '$header\r\n'
-          'content-type: text/plain; charset=utf-8\r\n'
-          'content-transfer-encoding: binary';
+      header = "$header\r\n"
+          "content-type: text/plain; charset=utf-8\r\n"
+          "content-transfer-encoding: binary";
     }
-    return '$header\r\n\r\n';
+    return "$header\r\n\r\n";
   }
 
   /// Returns the header string for a file. The return value is guaranteed to
@@ -59,9 +59,9 @@ class FormData {
     var header =
         'content-disposition: form-data; name="${browserEncode(file.key)}"';
     header = '$header; filename="${browserEncode(file.value.filename)}"';
-    header = '$header\r\n'
-        'content-type: ${file.value.contentType}';
-    return '$header\r\n\r\n';
+    header = "$header\r\n"
+        "content-type: ${file.value.contentType}";
+    return "$header\r\n\r\n";
   }
 
   /// The length of the request body from this [FormData]
@@ -69,34 +69,32 @@ class FormData {
     var length = 0;
 
     for (final item in fields) {
-      length += '--'.length +
+      length += "--".length +
           _maxBoundaryLength +
-          '\r\n'.length +
+          "\r\n".length +
           utf8.encode(_fieldHeader(item.key, item.value)).length +
           utf8.encode(item.value).length +
-          '\r\n'.length;
+          "\r\n".length;
     }
 
     for (var file in files) {
-      length += '--'.length +
+      length += "--".length +
           _maxBoundaryLength +
-          '\r\n'.length +
+          "\r\n".length +
           utf8.encode(_fileHeader(file)).length +
           file.value.length! +
-          '\r\n'.length;
+          "\r\n".length;
     }
 
-    return length + '--'.length + _maxBoundaryLength + '--\r\n'.length;
+    return length + "--".length + _maxBoundaryLength + "--\r\n".length;
   }
 
-  Future<List<int>> toBytes() {
-    return BodyBytesStream(_encode()).toBytes();
-  }
+  Future<List<int>> toBytes() => BodyBytesStream(_encode()).toBytes();
 
   Stream<List<int>> _encode() async* {
     const line = [13, 10];
-    final separator = utf8.encode('--$boundary\r\n');
-    final close = utf8.encode('--$boundary--\r\n');
+    final separator = utf8.encode("--$boundary\r\n");
+    final close = utf8.encode("--$boundary--\r\n");
 
     for (var field in fields) {
       yield separator;

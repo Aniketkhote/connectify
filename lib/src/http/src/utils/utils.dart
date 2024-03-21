@@ -1,24 +1,20 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:convert';
+import "dart:convert";
 
 /// Checks if the given [byte] represents a valid token character according to the HTTP specification.
 ///
 /// Token characters are defined as bytes with values greater than 31 and less than 128,
 /// excluding characters listed in [SEPARATOR_MAP].
-bool isTokenChar(int byte) {
-  return byte > 31 && byte < 128 && !SEPARATOR_MAP[byte];
-}
+bool isTokenChar(int byte) => byte > 31 && byte < 128 && !SEPARATOR_MAP[byte];
 
 /// Checks if the given [byte] represents a valid value character according to the HTTP specification.
 ///
 /// Value characters include bytes with values greater than 31 and less than 128,
 /// as well as specific bytes for space (SP) and horizontal tab (HT).
-bool isValueChar(int byte) {
-  return (byte > 31 && byte < 128) ||
+bool isValueChar(int byte) => (byte > 31 && byte < 128) ||
       (byte == CharCode.SP) ||
       (byte == CharCode.HT);
-}
 
 /// Provides constants representing ASCII character codes.
 class CharCode {
@@ -48,14 +44,14 @@ const SEPARATOR_MAP = [
   F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, //
   F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, //
   F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, //
-  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F
+  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F,
 ];
 
 String validateField(String field) {
   for (var i = 0; i < field.length; i++) {
     if (!isTokenChar(field.codeUnitAt(i))) {
       throw FormatException(
-          'Invalid HTTP header field name: ${json.encode(field)}', field, i);
+          "Invalid HTTP header field name: ${json.encode(field)}", field, i,);
     }
   }
   return field.toLowerCase();
@@ -65,20 +61,18 @@ String validateField(String field) {
 //   return (stream);
 // }
 
-final _asciiOnly = RegExp(r'^[\x00-\x7F]+$');
+final _asciiOnly = RegExp(r"^[\x00-\x7F]+$");
 
-final newlineRegExp = RegExp(r'\r\n|\r|\n');
+final newlineRegExp = RegExp(r"\r\n|\r|\n");
 
 /// Returns whether [string] is composed entirely of ASCII-compatible
 /// characters.
 bool isPlainAscii(String string) => _asciiOnly.hasMatch(string);
 
-const String GET_BOUNDARY = 'getx-http-boundary-';
+const String GET_BOUNDARY = "getx-http-boundary-";
 
 /// Encode [value] like browsers
-String browserEncode(String value) {
-  return value.replaceAll(newlineRegExp, '%0D%0A').replaceAll('"', '%22');
-}
+String browserEncode(String value) => value.replaceAll(newlineRegExp, "%0D%0A").replaceAll('"', "%22");
 
 const List<int> boundaryCharacters = <int>[
   43,
@@ -146,5 +140,5 @@ const List<int> boundaryCharacters = <int>[
   119,
   120,
   121,
-  122
+  122,
 ];

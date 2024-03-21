@@ -1,7 +1,7 @@
-import '../http/stub/file_decoder_stub.dart'
-    if (dart.library.html) '../http/html/file_decoder_html.dart'
-    if (dart.library.io) '../http/io/file_decoder_io.dart';
-import '../request/request.dart';
+import "package:connectify/src/http/src/http/stub/file_decoder_stub.dart"
+    if (dart.library.html) "../http/html/file_decoder_html.dart"
+    if (dart.library.io) "../http/io/file_decoder_io.dart";
+import "package:connectify/src/http/src/request/request.dart";
 
 /// Represents a file to be uploaded as part of a multipart request.
 class MultipartFile {
@@ -9,7 +9,7 @@ class MultipartFile {
   MultipartFile(
     dynamic data, {
     required this.filename,
-    this.contentType = 'application/octet-stream',
+    this.contentType = "application/octet-stream",
   }) : _bytes = fileToBytes(data) {
     _length = _bytes.length;
     _stream = _bytes.toStream();

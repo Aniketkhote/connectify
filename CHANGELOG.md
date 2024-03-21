@@ -1,3 +1,10 @@
+## 1.2.0
+
+- Refactored code for improved readability and maintainability.
+- Added explicit data types to enhance code clarity and type safety.
+- Resolved a bug that previously hindered the utilization of the base URL in HTTP requests when not explicitly provided in the request URLs.
+- Refreshed upgraded to 2.5.1
+
 ## 1.1.3
 
 - Refreshed upgraded to 2.0.1

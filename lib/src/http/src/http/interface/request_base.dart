@@ -1,5 +1,5 @@
-import '../../request/request.dart';
-import '../../response/response.dart';
+import "package:connectify/src/http/src/request/request.dart";
+import "package:connectify/src/http/src/response/response.dart";
 
 /// Abstract interface of [HttpRequestImpl].
 abstract class IClient {

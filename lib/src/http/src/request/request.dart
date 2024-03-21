@@ -1,15 +1,60 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
+import "dart:async";
+import "dart:convert";
+import "dart:typed_data";
 
-import '../../http.dart';
-import '../multipart/form_data.dart';
+import "package:connectify/src/http/http.dart";
+import "package:connectify/src/http/src/multipart/form_data.dart";
 
 /// Represents an HTTP request.
 ///
 /// This class encapsulates details of an HTTP request, including the request method,
 /// URL, headers, body, and other relevant properties.
 class Request<T> {
+
+  /// Constructs a new [Request] instance.
+  factory Request({
+    required Uri url,
+    required String method,
+    required Map<String, String> headers,
+    Stream<List<int>>? bodyBytes,
+    bool followRedirects = true,
+    int maxRedirects = 4,
+    int? contentLength,
+    FormData? files,
+    bool persistentConnection = true,
+    Decoder<T>? decoder,
+    ResponseInterceptor<T>? responseInterceptor,
+  }) {
+    if (followRedirects) {
+      assert(maxRedirects > 0);
+    }
+    return Request._(
+        url: url,
+        method: method,
+        bodyBytes: bodyBytes ??= <int>[].toStream(),
+        headers: Map.from(headers),
+        followRedirects: followRedirects,
+        maxRedirects: maxRedirects,
+        contentLength: contentLength,
+        files: files,
+        persistentConnection: persistentConnection,
+        decoder: decoder,
+        responseInterceptor: responseInterceptor,);
+  }
+
+  const Request._({
+    required this.method,
+    required this.bodyBytes,
+    required this.url,
+    required this.headers,
+    required this.contentLength,
+    required this.followRedirects,
+    required this.maxRedirects,
+    required this.files,
+    required this.persistentConnection,
+    required this.decoder,
+    this.responseInterceptor,
+  });
   /// Headers attach to this [Request]
   final Map<String, String> headers;
 
@@ -44,51 +89,6 @@ class Request<T> {
   /// The form data associated with the request, if any.
   final FormData? files;
 
-  const Request._({
-    required this.method,
-    required this.bodyBytes,
-    required this.url,
-    required this.headers,
-    required this.contentLength,
-    required this.followRedirects,
-    required this.maxRedirects,
-    required this.files,
-    required this.persistentConnection,
-    required this.decoder,
-    this.responseInterceptor,
-  });
-
-  /// Constructs a new [Request] instance.
-  factory Request({
-    required Uri url,
-    required String method,
-    required Map<String, String> headers,
-    Stream<List<int>>? bodyBytes,
-    bool followRedirects = true,
-    int maxRedirects = 4,
-    int? contentLength,
-    FormData? files,
-    bool persistentConnection = true,
-    Decoder<T>? decoder,
-    ResponseInterceptor<T>? responseInterceptor,
-  }) {
-    if (followRedirects) {
-      assert(maxRedirects > 0);
-    }
-    return Request._(
-        url: url,
-        method: method,
-        bodyBytes: bodyBytes ??= <int>[].toStream(),
-        headers: Map.from(headers),
-        followRedirects: followRedirects,
-        maxRedirects: maxRedirects,
-        contentLength: contentLength,
-        files: files,
-        persistentConnection: persistentConnection,
-        decoder: decoder,
-        responseInterceptor: responseInterceptor);
-  }
-
   /// Creates a copy of this [Request] with the specified changes.
   Request<T> copyWith({
     Uri? url,
@@ -120,7 +120,7 @@ class Request<T> {
         files: files ?? this.files,
         persistentConnection: persistentConnection ?? this.persistentConnection,
         decoder: decoder ?? this.decoder,
-        responseInterceptor: responseInterceptor ?? this.responseInterceptor);
+        responseInterceptor: responseInterceptor ?? this.responseInterceptor,);
   }
 }
 
@@ -143,7 +143,7 @@ extension BodyBytesStream on Stream<List<int>> {
     listen((val) => sink.add(val),
         onError: completer.completeError,
         onDone: sink.close,
-        cancelOnError: true);
+        cancelOnError: true,);
     return completer.future;
   }
 

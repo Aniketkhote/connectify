@@ -4,4 +4,4 @@
 /// allowing for the development of efficient and responsive Flutter applications.
 library connectify;
 
-export 'src/get_connect.dart';
+export "src/get_connect.dart";

@@ -1,15 +1,21 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
+import "dart:async";
+import "dart:convert";
+import "dart:io";
+import "dart:math";
 
-import 'package:refreshed/get_core/get_core.dart';
-
-import 'connection_status.dart';
-import 'socket_notifier.dart';
+import "package:connectify/src/sockets/src/connection_status.dart";
+import "package:connectify/src/sockets/src/socket_notifier.dart";
+import "package:refreshed/get_core/get_core.dart";
 
 /// A base class for managing WebSocket connections.
 class BaseWebSocket {
+
+  /// Constructs a [BaseWebSocket] with the given [url], [ping] interval, and [allowSelfSigned] flag.
+  BaseWebSocket(
+    this.url, {
+    this.ping = const Duration(seconds: 5),
+    this.allowSelfSigned = true,
+  });
   /// The URL of the WebSocket server.
   String url;
 
@@ -30,13 +36,6 @@ class BaseWebSocket {
 
   /// The current status of the connection.
   ConnectionStatus? connectionStatus;
-
-  /// Constructs a [BaseWebSocket] with the given [url], [ping] interval, and [allowSelfSigned] flag.
-  BaseWebSocket(
-    this.url, {
-    this.ping = const Duration(seconds: 5),
-    this.allowSelfSigned = true,
-  });
 
   /// Closes the WebSocket connection.
   void close([int? status, String? reason]) {
@@ -65,8 +64,8 @@ class BaseWebSocket {
       }, onDone: () {
         connectionStatus = ConnectionStatus.closed;
         socketNotifier!
-            .notifyClose(Close('Connection Closed', socket!.closeCode));
-      }, cancelOnError: true);
+            .notifyClose(Close("Connection Closed", socket!.closeCode));
+      }, cancelOnError: true,);
       return;
     } on SocketException catch (e) {
       connectionStatus = ConnectionStatus.closed;
@@ -85,7 +84,7 @@ class BaseWebSocket {
 
   /// Emits an event with associated [data] over the WebSocket connection.
   void emit(String event, dynamic data) {
-    send(jsonEncode({'type': event, 'data': data}));
+    send(jsonEncode({"type": event, "data": data}));
   }
 
   /// Registers a callback [message] to handle incoming messages with a specific [event] type.
@@ -132,16 +131,16 @@ class BaseWebSocket {
       var client = HttpClient(context: SecurityContext());
       client.badCertificateCallback = (cert, host, port) {
         Get.log(
-            'BaseWebSocket: Allow self-signed certificate => $host:$port. ');
+            "BaseWebSocket: Allow self-signed certificate => $host:$port. ",);
         return true;
       };
 
       var request = await client.getUrl(Uri.parse(url))
-        ..headers.add('Connection', 'Upgrade')
-        ..headers.add('Upgrade', 'websocket')
-        ..headers.add('Cache-Control', 'no-cache')
-        ..headers.add('Sec-WebSocket-Version', '13')
-        ..headers.add('Sec-WebSocket-Key', key.toLowerCase());
+        ..headers.add("Connection", "Upgrade")
+        ..headers.add("Upgrade", "websocket")
+        ..headers.add("Cache-Control", "no-cache")
+        ..headers.add("Sec-WebSocket-Version", "13")
+        ..headers.add("Sec-WebSocket-Key", key.toLowerCase());
 
       var response = await request.close();
       var socket = await response.detachSocket();

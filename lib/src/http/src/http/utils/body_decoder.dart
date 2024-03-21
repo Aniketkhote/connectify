@@ -1,8 +1,7 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:refreshed/refreshed.dart';
-
-import '../../request/request.dart';
+import "package:connectify/src/http/src/request/request.dart";
+import "package:refreshed/refreshed.dart";
 
 /// Decodes the response body based on the provided request and MIME type.
 ///
@@ -20,11 +19,11 @@ T? bodyDecoded<T>(Request<T> request, String stringBody, String? mimeType) {
   T? body;
   dynamic bodyToDecode;
 
-  if (mimeType != null && mimeType.contains('application/json')) {
+  if (mimeType != null && mimeType.contains("application/json")) {
     try {
       bodyToDecode = jsonDecode(stringBody);
     } on FormatException catch (_) {
-      Get.log('Cannot decode server response to json');
+      Get.log("Cannot decode server response to json");
       bodyToDecode = stringBody;
     }
   } else {
@@ -32,7 +31,7 @@ T? bodyDecoded<T>(Request<T> request, String stringBody, String? mimeType) {
   }
 
   try {
-    if (stringBody == '') {
+    if (stringBody == "") {
       body = null;
     } else if (request.decoder == null) {
       body = bodyToDecode as T?;

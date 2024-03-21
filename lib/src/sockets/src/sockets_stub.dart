@@ -1,4 +1,4 @@
-import 'socket_notifier.dart';
+import "package:connectify/src/sockets/src/socket_notifier.dart";
 
 /// Base class for WebSocket implementation.
 ///
@@ -20,9 +20,6 @@ import 'socket_notifier.dart';
 /// socket.send('Hello, WebSocket!');
 /// ```
 class BaseWebSocket {
-  String url;
-  Duration ping;
-  bool allowSelfSigned;
 
   /// Creates a new instance of [BaseWebSocket].
   ///
@@ -39,15 +36,18 @@ class BaseWebSocket {
     this.ping = const Duration(seconds: 5),
     this.allowSelfSigned = true,
   }) {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
+  String url;
+  Duration ping;
+  bool allowSelfSigned;
 
   /// Connects to the WebSocket server.
   ///
   /// Throws an error indicating that `dart:io` or `dart:html` is required
   /// to use WebSocket functionality.
   Future connect() async {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
 
   /// Sets up a callback function to be called when the WebSocket connection is opened.
@@ -55,7 +55,7 @@ class BaseWebSocket {
   /// Throws an error indicating that `dart:io` or `dart:html` is required
   /// to use WebSocket functionality.
   void onOpen(OpenSocket fn) {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
 
   /// Sets up a callback function to be called when the WebSocket connection is closed.
@@ -63,7 +63,7 @@ class BaseWebSocket {
   /// Throws an error indicating that `dart:io` or `dart:html` is required
   /// to use WebSocket functionality.
   void onClose(CloseSocket fn) {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
 
   /// Sets up a callback function to be called when an error occurs on the WebSocket connection.
@@ -71,7 +71,7 @@ class BaseWebSocket {
   /// Throws an error indicating that `dart:io` or `dart:html` is required
   /// to use WebSocket functionality.
   void onError(CloseSocket fn) {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
 
   /// Sets up a callback function to be called when a message is received on the WebSocket connection.
@@ -79,7 +79,7 @@ class BaseWebSocket {
   /// Throws an error indicating that `dart:io` or `dart:html` is required
   /// to use WebSocket functionality.
   void onMessage(MessageSocket fn) {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
 
   /// Sets up a callback function to be called when a specific event occurs on the WebSocket connection.
@@ -87,7 +87,7 @@ class BaseWebSocket {
   /// Throws an error indicating that `dart:io` or `dart:html` is required
   /// to use WebSocket functionality.
   void on(String event, MessageSocket message) {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
 
   /// Closes the WebSocket connection.
@@ -95,7 +95,7 @@ class BaseWebSocket {
   /// Throws an error indicating that `dart:io` or `dart:html` is required
   /// to use WebSocket functionality.
   void close([int? status, String? reason]) {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
 
   /// Sends data over the WebSocket connection.
@@ -103,7 +103,7 @@ class BaseWebSocket {
   /// Throws an error indicating that `dart:io` or `dart:html` is required
   /// to use WebSocket functionality.
   void send(dynamic data) async {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
 
   /// Disposes the resources associated with the WebSocket connection.
@@ -111,7 +111,7 @@ class BaseWebSocket {
   /// Throws an error indicating that `dart:io` or `dart:html` is required
   /// to use WebSocket functionality.
   void dispose() {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
 
   /// Emits an event with associated data over the WebSocket connection.
@@ -119,6 +119,6 @@ class BaseWebSocket {
   /// Throws an error indicating that `dart:io` or `dart:html` is required
   /// to use WebSocket functionality.
   void emit(String event, dynamic data) {
-    throw 'To use sockets you need dart:io or dart:html';
+    throw "To use sockets you need dart:io or dart:html";
   }
 }

@@ -1,4 +1,4 @@
-import 'dart:io';
+import "dart:io";
 
 /// Converts the provided [data] into a list of bytes.
 ///
@@ -17,12 +17,12 @@ List<int> fileToBytes(dynamic data) {
     if (File(data).existsSync()) {
       return File(data).readAsBytesSync();
     } else {
-      throw 'File $data does not exist';
+      throw "File $data does not exist";
     }
   } else if (data is List<int>) {
     return data;
   } else {
     throw const FormatException(
-        'File is not "File" or "String" or "List<int>"');
+        'File is not "File" or "String" or "List<int>"',);
   }
 }

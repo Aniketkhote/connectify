@@ -1,4 +1,4 @@
-import 'dart:convert';
+import "dart:convert";
 
 /// Signature for [SocketNotifier.addCloses].
 typedef CloseSocket = void Function(Close);
@@ -11,15 +11,13 @@ typedef OpenSocket = void Function();
 
 /// Wrapper class to message and reason from SocketNotifier
 class Close {
+
+  Close(this.message, this.reason);
   final String? message;
   final int? reason;
 
-  Close(this.message, this.reason);
-
   @override
-  String toString() {
-    return 'Closed by server [$reason => $message]!';
-  }
+  String toString() => "Closed by server [$reason => $message]!";
 }
 
 /// This class manages the transmission of messages over websockets using
@@ -88,8 +86,8 @@ class SocketNotifier {
   void _tryOn(String message) {
     try {
       var msg = jsonDecode(message);
-      final event = msg['type'];
-      final data = msg['data'];
+      final event = msg["type"];
+      final data = msg["data"];
       if (_onEvents!.containsKey(event)) {
         _onEvents![event]!(data);
       }

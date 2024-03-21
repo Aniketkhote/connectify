@@ -1,17 +1,16 @@
-import 'package:refreshed/get_instance/get_instance.dart';
+import "package:connectify/src/http/http.dart";
+import "package:connectify/src/http/src/certificates/certificates.dart";
+import "package:connectify/src/http/src/exceptions/exceptions.dart";
+import "package:connectify/src/http/src/response/response.dart";
+import "package:connectify/src/sockets/sockets.dart";
+import "package:refreshed/get_instance/get_instance.dart";
 
-import 'http/http.dart';
-import 'http/src/certificates/certificates.dart';
-import 'http/src/exceptions/exceptions.dart';
-import 'http/src/response/response.dart';
-import 'sockets/sockets.dart';
-
-export 'http/http.dart';
-export 'http/src/certificates/certificates.dart';
-export 'http/src/multipart/form_data.dart';
-export 'http/src/multipart/multipart_file.dart';
-export 'http/src/response/response.dart';
-export 'sockets/sockets.dart';
+export "http/http.dart";
+export "http/src/certificates/certificates.dart";
+export "http/src/multipart/form_data.dart";
+export "http/src/multipart/multipart_file.dart";
+export "http/src/response/response.dart";
+export "sockets/sockets.dart";
 
 /// Interface defining methods for making HTTP requests and WebSocket connections.
 ///
@@ -36,7 +35,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
   Future<Response<T>> request<T>(
     String url,
     String method, {
-    dynamic body,
+    body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -46,7 +45,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
   /// Sends a POST request.
   Future<Response<T>> post<T>(
     String url,
-    dynamic body, {
+    body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -56,7 +55,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
   /// Executes a PUT request.
   Future<Response<T>> put<T>(
     String url,
-    dynamic body, {
+    body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -75,7 +74,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
   /// Executes a PATCH request.
   Future<Response<T>> patch<T>(
     String url,
-    dynamic body, {
+    body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -119,7 +118,7 @@ class GetConnect extends GetConnectInterface {
   /// [allowAutoSignedCert] determines whether to allow automatically signed certificates.
   /// [withCredentials] determines whether to include credentials in cross-origin requests.
   GetConnect({
-    this.userAgent = 'connectify-client',
+    this.userAgent = "connectify-client",
     this.timeout = const Duration(seconds: 5),
     this.followRedirects = true,
     this.maxRedirects = 5,
@@ -139,7 +138,7 @@ class GetConnect extends GetConnectInterface {
   String? baseUrl;
 
   /// The default content type for HTTP requests.
-  String defaultContentType = 'application/json; charset=utf-8';
+  String defaultContentType = "application/json; charset=utf-8";
 
   /// Determines whether to follow HTTP redirects.
   bool followRedirects;
@@ -176,17 +175,18 @@ class GetConnect extends GetConnectInterface {
 
   @override
   GetHttpClient get httpClient => _httpClient ??= GetHttpClient(
-      userAgent: userAgent,
-      sendUserAgent: sendUserAgent,
-      timeout: timeout,
-      followRedirects: followRedirects,
-      maxRedirects: maxRedirects,
-      maxAuthRetries: maxAuthRetries,
-      allowAutoSignedCert: allowAutoSignedCert,
-      baseUrl: baseUrl,
-      trustedCertificates: trustedCertificates,
-      withCredentials: withCredentials,
-      findProxy: findProxy);
+        userAgent: userAgent,
+        sendUserAgent: sendUserAgent,
+        timeout: timeout,
+        followRedirects: followRedirects,
+        maxRedirects: maxRedirects,
+        maxAuthRetries: maxAuthRetries,
+        allowAutoSignedCert: allowAutoSignedCert,
+        baseUrl: baseUrl,
+        trustedCertificates: trustedCertificates,
+        withCredentials: withCredentials,
+        findProxy: findProxy,
+      );
 
   @override
   Future<Response<T>> get<T>(
@@ -209,7 +209,7 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<Response<T>> post<T>(
     String? url,
-    dynamic body, {
+    body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -231,7 +231,7 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<Response<T>> put<T>(
     String url,
-    dynamic body, {
+    body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -253,7 +253,7 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<Response<T>> patch<T>(
     String url,
-    dynamic body, {
+    body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -276,7 +276,7 @@ class GetConnect extends GetConnectInterface {
   Future<Response<T>> request<T>(
     String url,
     String method, {
-    dynamic body,
+    body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -362,30 +362,35 @@ class GetConnect extends GetConnectInterface {
     try {
       final Response res = await post(
         url,
-        <String, Object?>{'query': query, 'variables': variables},
+        <String, Object?>{"query": query, "variables": variables},
         headers: headers,
       );
 
-      final listError = res.body['errors'];
+      final listError = res.body["errors"];
       if ((listError is List) && listError.isNotEmpty) {
         return GraphQLResponse<T>(
-            graphQLErrors: listError
-                .map((e) => GraphQLError(
-                      code: (e['extensions'] != null
-                              ? e['extensions']['code'] ?? ''
-                              : '')
-                          .toString(),
-                      message: (e['message'] ?? '').toString(),
-                    ))
-                .toList());
+          graphQLErrors: listError
+              .map(
+                (e) => GraphQLError(
+                  code: (e["extensions"] != null
+                          ? e["extensions"]["code"] ?? ""
+                          : "")
+                      .toString(),
+                  message: (e["message"] ?? "").toString(),
+                ),
+              )
+              .toList(),
+        );
       }
       return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (_) {
-      return GraphQLResponse<T>(graphQLErrors: <GraphQLError>[
-        GraphQLError(
-          message: _.toString(),
-        )
-      ]);
+      return GraphQLResponse<T>(
+        graphQLErrors: <GraphQLError>[
+          GraphQLError(
+            message: _.toString(),
+          ),
+        ],
+      );
     }
   }
 
@@ -399,27 +404,32 @@ class GetConnect extends GetConnectInterface {
     try {
       final Response res = await post(
         url,
-        <String, Object?>{'query': mutation, 'variables': variables},
+        <String, Object?>{"query": mutation, "variables": variables},
         headers: headers,
       );
 
-      final listError = res.body['errors'];
+      final listError = res.body["errors"];
       if ((listError is List) && listError.isNotEmpty) {
         return GraphQLResponse<T>(
-            graphQLErrors: listError
-                .map((e) => GraphQLError(
-                      code: e['extensions']['code']?.toString(),
-                      message: e['message']?.toString(),
-                    ))
-                .toList());
+          graphQLErrors: listError
+              .map(
+                (e) => GraphQLError(
+                  code: e["extensions"]["code"]?.toString(),
+                  message: e["message"]?.toString(),
+                ),
+              )
+              .toList(),
+        );
       }
       return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (_) {
-      return GraphQLResponse<T>(graphQLErrors: <GraphQLError>[
-        GraphQLError(
-          message: _.toString(),
-        )
-      ]);
+      return GraphQLResponse<T>(
+        graphQLErrors: <GraphQLError>[
+          GraphQLError(
+            message: _.toString(),
+          ),
+        ],
+      );
     }
   }
 
@@ -434,13 +444,13 @@ class GetConnect extends GetConnectInterface {
   /// [isHttp] specifies whether the check is for an HTTP client.
   void _checkIfDisposed({bool isHttp = true}) {
     if (_isDisposed) {
-      throw Exception('Cannot emit events to disposed clients');
+      throw Exception("Cannot emit events to disposed clients");
     }
   }
 
   /// Disposes of the connection by closing sockets and the HTTP client.
   void dispose() {
-    _sockets?.forEach((socket) => socket.close());
+    _sockets?.forEach((GetSocket socket) => socket.close());
     _sockets?.clear();
     sockets = null;
     _httpClient?.close();

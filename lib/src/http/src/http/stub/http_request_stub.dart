@@ -1,7 +1,7 @@
-import '../../certificates/certificates.dart';
-import '../../request/request.dart';
-import '../../response/response.dart';
-import '../interface/request_base.dart';
+import "package:connectify/src/http/src/certificates/certificates.dart";
+import "package:connectify/src/http/src/http/interface/request_base.dart";
+import "package:connectify/src/http/src/request/request.dart";
+import "package:connectify/src/http/src/response/response.dart";
 
 /// Implementation of HTTP client for making HTTP requests.
 class HttpRequestImpl extends IClient {

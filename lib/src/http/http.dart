@@ -1,19 +1,19 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
+import "dart:async";
+import "dart:convert";
+import "dart:io";
 
-import 'src/certificates/certificates.dart';
-import 'src/exceptions/exceptions.dart';
-import 'src/http/interface/request_base.dart';
-import 'src/http/request/http_request.dart';
-import 'src/interceptors/get_modifiers.dart';
-import 'src/multipart/form_data.dart';
-import 'src/request/request.dart';
-import 'src/response/response.dart';
-import 'src/status/http_status.dart';
+import "package:connectify/src/http/src/certificates/certificates.dart";
+import "package:connectify/src/http/src/exceptions/exceptions.dart";
+import "package:connectify/src/http/src/http/interface/request_base.dart";
+import "package:connectify/src/http/src/http/request/http_request.dart";
+import "package:connectify/src/http/src/interceptors/get_modifiers.dart";
+import "package:connectify/src/http/src/multipart/form_data.dart";
+import "package:connectify/src/http/src/request/request.dart";
+import "package:connectify/src/http/src/response/response.dart";
+import "package:connectify/src/http/src/status/http_status.dart";
 
 /// Defines a decoder function to convert dynamic data into type T.
-typedef Decoder<T> = T Function(dynamic data);
+typedef Decoder<T> = T Function(T data);
 
 /// Represents a progress function that takes a double value indicating the progress percentage.
 typedef Progress = Function(double percent);
@@ -21,7 +21,10 @@ typedef Progress = Function(double percent);
 /// Represents a response interceptor function that intercepts and potentially modifies
 /// the response before it's processed.
 typedef ResponseInterceptor<T> = Future<Response<T>?> Function(
-    Request<T> request, Type targetType, HttpClientResponse response);
+  Request<T> request,
+  Type targetType,
+  HttpClientResponse response,
+);
 
 /// A customizable HTTP client for making HTTP requests.
 ///
@@ -32,7 +35,7 @@ typedef ResponseInterceptor<T> = Future<Response<T>?> Function(
 class GetHttpClient {
   /// Creates a new instance of [GetHttpClient].
   GetHttpClient({
-    this.userAgent = 'connectify-client',
+    this.userAgent = "connectify-client",
     this.timeout = const Duration(seconds: 8),
     this.followRedirects = true,
     this.maxRedirects = 5,
@@ -90,7 +93,7 @@ class GetHttpClient {
 
   String Function(Uri url)? findProxy;
 
-  String defaultContentType = 'application/json; charset=utf-8';
+  String defaultContentType = "application/json; charset=utf-8";
 
   Decoder? defaultDecoder;
   ResponseInterceptor? defaultResponseInterceptor;
@@ -136,7 +139,7 @@ class GetHttpClient {
   /// contains key-value pairs for query parameters.
   Uri createUri(String? url, Map<String, dynamic>? query) {
     if (baseUrl != null) {
-      url = baseUrl! + url!;
+      url = baseUrl! + (url ?? "");
     }
     final Uri uri = Uri.parse(url!);
     if (query != null) {
@@ -148,7 +151,7 @@ class GetHttpClient {
   Future<Request<T>> _requestWithBody<T>(
     String? url,
     String? contentType,
-    dynamic body,
+    body,
     String method,
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
@@ -160,42 +163,42 @@ class GetHttpClient {
     final Map<String, String> headers = <String, String>{};
 
     if (sendUserAgent) {
-      headers['user-agent'] = userAgent;
+      headers["user-agent"] = userAgent;
     }
 
     if (body is FormData) {
       bodyBytes = await body.toBytes();
-      headers['content-length'] = bodyBytes.length.toString();
-      headers['content-type'] =
-          'multipart/form-data; boundary=${body.boundary}';
+      headers["content-length"] = bodyBytes.length.toString();
+      headers["content-type"] =
+          "multipart/form-data; boundary=${body.boundary}";
     } else if (contentType != null &&
-        contentType.toLowerCase() == 'application/x-www-form-urlencoded' &&
+        contentType.toLowerCase() == "application/x-www-form-urlencoded" &&
         body is Map) {
       final List parts = <dynamic>[];
       (body as Map<String, dynamic>).forEach((String key, value) {
-        parts.add('${Uri.encodeQueryComponent(key)}='
-            '${Uri.encodeQueryComponent(value.toString())}');
+        parts.add("${Uri.encodeQueryComponent(key)}="
+            "${Uri.encodeQueryComponent(value.toString())}");
       });
-      final String formData = parts.join('&');
+      final String formData = parts.join("&");
       bodyBytes = utf8.encode(formData);
       _setContentLength(headers, bodyBytes.length);
-      headers['content-type'] = contentType;
+      headers["content-type"] = contentType;
     } else if (body is Map || body is List) {
       final String jsonString = json.encode(body);
       bodyBytes = utf8.encode(jsonString);
       _setContentLength(headers, bodyBytes.length);
-      headers['content-type'] = contentType ?? defaultContentType;
+      headers["content-type"] = contentType ?? defaultContentType;
     } else if (body is String) {
       bodyBytes = utf8.encode(body);
       _setContentLength(headers, bodyBytes.length);
 
-      headers['content-type'] = contentType ?? defaultContentType;
+      headers["content-type"] = contentType ?? defaultContentType;
     } else if (body == null) {
       _setContentLength(headers, 0);
-      headers['content-type'] = contentType ?? defaultContentType;
+      headers["content-type"] = contentType ?? defaultContentType;
     } else {
       if (!errorSafety) {
-        throw UnexpectedFormat('body cannot be ${body.runtimeType}');
+        throw UnexpectedFormat("body cannot be ${body.runtimeType}");
       }
     }
 
@@ -205,20 +208,21 @@ class GetHttpClient {
 
     final Uri uri = createUri(url, query);
     return Request<T>(
-        method: method,
-        url: uri,
-        headers: headers,
-        bodyBytes: bodyStream,
-        contentLength: bodyBytes?.length ?? 0,
-        followRedirects: followRedirects,
-        maxRedirects: maxRedirects,
-        decoder: decoder,
-        responseInterceptor: responseInterceptor);
+      method: method,
+      url: uri,
+      headers: headers,
+      bodyBytes: bodyStream,
+      contentLength: bodyBytes?.length ?? 0,
+      followRedirects: followRedirects,
+      maxRedirects: maxRedirects,
+      decoder: decoder,
+      responseInterceptor: responseInterceptor,
+    );
   }
 
   void _setContentLength(Map<String, String> headers, int contentLength) {
     if (sendContentLength) {
-      headers['content-length'] = '$contentLength';
+      headers["content-length"] = "$contentLength";
     }
   }
 
@@ -233,14 +237,15 @@ class GetHttpClient {
         Stream.fromIterable(bodyBytes.map((int i) => <int>[i]))
             .transform<List<int>>(
       StreamTransformer.fromHandlers(
-          handleData: (List<int> data, EventSink<List<int>> sink) {
-        total += data.length;
-        if (uploadProgress != null) {
-          final double percent = total / length * 100;
-          uploadProgress(percent);
-        }
-        sink.add(data);
-      }),
+        handleData: (List<int> data, EventSink<List<int>> sink) {
+          total += data.length;
+          if (uploadProgress != null) {
+            final double percent = total / length * 100;
+            uploadProgress(percent);
+          }
+          sink.add(data);
+        },
+      ),
     );
     return byteStream;
   }
@@ -249,9 +254,9 @@ class GetHttpClient {
     Map<String, String> headers,
     String? contentType,
   ) {
-    headers['content-type'] = contentType ?? defaultContentType;
+    headers["content-type"] = contentType ?? defaultContentType;
     if (sendUserAgent) {
-      headers['user-agent'] = userAgent;
+      headers["user-agent"] = userAgent;
     }
   }
 
@@ -310,7 +315,7 @@ class GetHttpClient {
         return Response<T>(
           request: newRequest,
           headers: null,
-          statusText: '$err',
+          statusText: "$err",
         );
       }
     }
@@ -327,25 +332,31 @@ class GetHttpClient {
     _setSimpleHeaders(headers, contentType);
     final Uri uri = createUri(url, query);
 
-    return Future.value(Request<T>(
-      method: 'get',
-      url: uri,
-      headers: headers,
-      decoder: decoder ?? (defaultDecoder as Decoder<T>?),
-      responseInterceptor: _responseInterceptor(responseInterceptor),
-      contentLength: 0,
-      followRedirects: followRedirects,
-      maxRedirects: maxRedirects,
-    ));
+    return Future.value(
+      Request<T>(
+        method: "get",
+        url: uri,
+        headers: headers,
+        decoder: decoder ?? (defaultDecoder as Decoder<T>?),
+        responseInterceptor: _responseInterceptor(responseInterceptor),
+        contentLength: 0,
+        followRedirects: followRedirects,
+        maxRedirects: maxRedirects,
+      ),
+    );
   }
 
   ResponseInterceptor<T>? _responseInterceptor<T>(
-      ResponseInterceptor<T>? actual) {
+    ResponseInterceptor<T>? actual,
+  ) {
     if (actual != null) return actual;
     final ResponseInterceptor? defaultInterceptor = defaultResponseInterceptor;
     return defaultInterceptor != null
-        ? (Request<T> request, Type targetType,
-                HttpClientResponse response) async =>
+        ? (
+            Request<T> request,
+            Type targetType,
+            HttpClientResponse response,
+          ) async =>
             await defaultInterceptor(request, targetType, response)
                 as Response<T>?
         : null;
@@ -354,24 +365,23 @@ class GetHttpClient {
   Future<Request<T>> _request<T>(
     String? url,
     String method, {
-    required dynamic body,
+    required body,
     required Map<String, dynamic>? query,
     required Progress? uploadProgress,
     String? contentType,
     Decoder<T>? decoder,
     ResponseInterceptor<T>? responseInterceptor,
-  }) {
-    return _requestWithBody<T>(
-      url,
-      contentType,
-      body,
-      method,
-      query,
-      decoder ?? (defaultDecoder as Decoder<T>?),
-      _responseInterceptor(responseInterceptor),
-      uploadProgress,
-    );
-  }
+  }) =>
+      _requestWithBody<T>(
+        url,
+        contentType,
+        body,
+        method,
+        query,
+        decoder ?? (defaultDecoder as Decoder<T>?),
+        _responseInterceptor(responseInterceptor),
+        uploadProgress,
+      );
 
   Request<T> _delete<T>(
     String url,
@@ -385,7 +395,7 @@ class GetHttpClient {
     final Uri uri = createUri(url, query);
 
     return Request<T>(
-      method: 'delete',
+      method: "delete",
       url: uri,
       headers: headers,
       decoder: decoder ?? (defaultDecoder as Decoder<T>?),
@@ -413,9 +423,11 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
-        statusText: 'Can not connect to server. Reason: $e',
-      ));
+      return Future.value(
+        Response<T>(
+          statusText: "Can not connect to server. Reason: $e",
+        ),
+      );
     }
   }
 
@@ -427,7 +439,7 @@ class GetHttpClient {
   /// Returns a [Future] that resolves to a [Response] object containing the result of the request.
   Future<Response<T>> patch<T>(
     String url, {
-    dynamic body,
+    body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -439,7 +451,7 @@ class GetHttpClient {
       final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
-          'patch',
+          "patch",
           contentType: contentType,
           body: body,
           query: query,
@@ -454,9 +466,11 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
-        statusText: 'Can not connect to server. Reason: $e',
-      ));
+      return Future.value(
+        Response<T>(
+          statusText: "Can not connect to server. Reason: $e",
+        ),
+      );
     }
   }
 
@@ -468,7 +482,7 @@ class GetHttpClient {
   /// Returns a [Future] that resolves to a [Response] object containing the result of the request.
   Future<Response<T>> post<T>(
     String? url, {
-    dynamic body,
+    body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -480,7 +494,7 @@ class GetHttpClient {
       final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
-          'post',
+          "post",
           contentType: contentType,
           body: body,
           query: query,
@@ -495,9 +509,11 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
-        statusText: 'Can not connect to server. Reason: $e',
-      ));
+      return Future.value(
+        Response<T>(
+          statusText: "Can not connect to server. Reason: $e",
+        ),
+      );
     }
   }
 
@@ -511,7 +527,7 @@ class GetHttpClient {
   Future<Response<T>> request<T>(
     String url,
     String method, {
-    dynamic body,
+    body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -538,9 +554,11 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
-        statusText: 'Can not connect to server. Reason: $e',
-      ));
+      return Future.value(
+        Response<T>(
+          statusText: "Can not connect to server. Reason: $e",
+        ),
+      );
     }
   }
 
@@ -552,7 +570,7 @@ class GetHttpClient {
   /// Returns a [Future] that resolves to a [Response] object containing the result of the request.
   Future<Response<T>> put<T>(
     String url, {
-    dynamic body,
+    body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -564,7 +582,7 @@ class GetHttpClient {
       final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
-          'put',
+          "put",
           contentType: contentType,
           query: query,
           body: body,
@@ -579,9 +597,11 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
-        statusText: 'Can not connect to server. Reason: $e',
-      ));
+      return Future.value(
+        Response<T>(
+          statusText: "Can not connect to server. Reason: $e",
+        ),
+      );
     }
   }
 
@@ -609,9 +629,11 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
-        statusText: 'Can not connect to server. Reason: $e',
-      ));
+      return Future.value(
+        Response<T>(
+          statusText: "Can not connect to server. Reason: $e",
+        ),
+      );
     }
   }
 
@@ -621,12 +643,14 @@ class GetHttpClient {
   /// [contentType], [query], [decoder], and [responseInterceptor].
   ///
   /// Returns a [Future] that resolves to a [Response] object containing the result of the request.
-  Future<Response<T>> delete<T>(String url,
-      {Map<String, String>? headers,
-      String? contentType,
-      Map<String, dynamic>? query,
-      Decoder<T>? decoder,
-      ResponseInterceptor<T>? responseInterceptor}) async {
+  Future<Response<T>> delete<T>(
+    String url, {
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    ResponseInterceptor<T>? responseInterceptor,
+  }) async {
     try {
       final Response<T> response = await _performRequest<T>(
         () async =>
@@ -638,9 +662,11 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
-        statusText: 'Can not connect to server. Reason: $e',
-      ));
+      return Future.value(
+        Response<T>(
+          statusText: "Can not connect to server. Reason: $e",
+        ),
+      );
     }
   }
 

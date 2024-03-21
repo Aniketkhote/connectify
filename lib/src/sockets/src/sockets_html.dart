@@ -1,15 +1,26 @@
-import 'dart:async';
-import 'dart:convert';
+import "dart:async";
+import "dart:convert";
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
+import "dart:html";
 
-import 'package:refreshed/get_core/get_core.dart';
-
-import 'connection_status.dart';
-import 'socket_notifier.dart';
+import "package:connectify/src/sockets/src/connection_status.dart";
+import "package:connectify/src/sockets/src/socket_notifier.dart";
+import "package:refreshed/get_core/get_core.dart";
 
 /// A class for managing WebSocket connections.
 class BaseWebSocket {
+
+  /// Constructs a [BaseWebSocket] with the given [url], [ping] interval, and [allowSelfSigned] flag.
+  BaseWebSocket(
+    this.url, {
+    this.ping = const Duration(seconds: 5),
+    this.allowSelfSigned = true,
+  }) {
+    // Ensure proper URL format for WebSocket connection.
+    url = url.startsWith("https")
+        ? url.replaceAll("https:", "wss:")
+        : url.replaceAll("http:", "ws:");
+  }
   /// The URL of the WebSocket server.
   String url;
 
@@ -34,18 +45,6 @@ class BaseWebSocket {
   /// Timer for sending ping requests.
   Timer? _t;
 
-  /// Constructs a [BaseWebSocket] with the given [url], [ping] interval, and [allowSelfSigned] flag.
-  BaseWebSocket(
-    this.url, {
-    this.ping = const Duration(seconds: 5),
-    this.allowSelfSigned = true,
-  }) {
-    // Ensure proper URL format for WebSocket connection.
-    url = url.startsWith('https')
-        ? url.replaceAll('https:', 'wss:')
-        : url.replaceAll('http:', 'ws:');
-  }
-
   /// Closes the WebSocket connection.
   void close([int? status, String? reason]) {
     socket?.close(status, reason);
@@ -59,7 +58,7 @@ class BaseWebSocket {
       socket!.onOpen.listen((e) {
         socketNotifier?.open();
         _t = Timer?.periodic(ping, (t) {
-          socket!.send('');
+          socket!.send("");
         });
         connectionStatus = ConnectionStatus.connected;
       });
@@ -96,7 +95,7 @@ class BaseWebSocket {
 
   /// Emits an event with associated [data] over the WebSocket connection.
   void emit(String event, dynamic data) {
-    send(jsonEncode({'type': event, 'data': data}));
+    send(jsonEncode({"type": event, "data": data}));
   }
 
   /// Registers a callback [message] to handle incoming messages with a specific [event] type.
@@ -132,7 +131,7 @@ class BaseWebSocket {
     if (socket != null && socket!.readyState == WebSocket.OPEN) {
       socket!.send(data);
     } else {
-      Get.log('WebSocket not connected, message $data not sent');
+      Get.log("WebSocket not connected, message $data not sent");
     }
   }
 }
