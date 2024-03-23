@@ -12,9 +12,8 @@ bool isTokenChar(int byte) => byte > 31 && byte < 128 && !SEPARATOR_MAP[byte];
 ///
 /// Value characters include bytes with values greater than 31 and less than 128,
 /// as well as specific bytes for space (SP) and horizontal tab (HT).
-bool isValueChar(int byte) => (byte > 31 && byte < 128) ||
-      (byte == CharCode.SP) ||
-      (byte == CharCode.HT);
+bool isValueChar(int byte) =>
+    (byte > 31 && byte < 128) || (byte == CharCode.SP) || (byte == CharCode.HT);
 
 /// Provides constants representing ASCII character codes.
 class CharCode {
@@ -51,7 +50,10 @@ String validateField(String field) {
   for (var i = 0; i < field.length; i++) {
     if (!isTokenChar(field.codeUnitAt(i))) {
       throw FormatException(
-          "Invalid HTTP header field name: ${json.encode(field)}", field, i,);
+        "Invalid HTTP header field name: ${json.encode(field)}",
+        field,
+        i,
+      );
     }
   }
   return field.toLowerCase();
@@ -72,7 +74,8 @@ bool isPlainAscii(String string) => _asciiOnly.hasMatch(string);
 const String GET_BOUNDARY = "getx-http-boundary-";
 
 /// Encode [value] like browsers
-String browserEncode(String value) => value.replaceAll(newlineRegExp, "%0D%0A").replaceAll('"', "%22");
+String browserEncode(String value) =>
+    value.replaceAll(newlineRegExp, "%0D%0A").replaceAll('"', "%22");
 
 const List<int> boundaryCharacters = <int>[
   43,

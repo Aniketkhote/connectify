@@ -26,9 +26,11 @@ class FormData {
 
   static String _getBoundary() {
     final newRandom = Random();
-    var list = List<int>.generate(_maxBoundaryLength - GET_BOUNDARY.length,
-        (_) => boundaryCharacters[newRandom.nextInt(boundaryCharacters.length)],
-        growable: false,);
+    var list = List<int>.generate(
+      _maxBoundaryLength - GET_BOUNDARY.length,
+      (_) => boundaryCharacters[newRandom.nextInt(boundaryCharacters.length)],
+      growable: false,
+    );
     return '$GET_BOUNDARY${String.fromCharCodes(list)}';
   }
 

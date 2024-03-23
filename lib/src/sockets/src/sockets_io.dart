@@ -9,13 +9,13 @@ import "package:refreshed/get_core/get_core.dart";
 
 /// A base class for managing WebSocket connections.
 class BaseWebSocket {
-
   /// Constructs a [BaseWebSocket] with the given [url], [ping] interval, and [allowSelfSigned] flag.
   BaseWebSocket(
     this.url, {
     this.ping = const Duration(seconds: 5),
     this.allowSelfSigned = true,
   });
+
   /// The URL of the WebSocket server.
   String url;
 
@@ -57,15 +57,20 @@ class BaseWebSocket {
       socketNotifier?.open();
       connectionStatus = ConnectionStatus.connected;
 
-      socket!.listen((data) {
-        socketNotifier!.notifyData(data);
-      }, onError: (err) {
-        socketNotifier!.notifyError(Close(err.toString(), 1005));
-      }, onDone: () {
-        connectionStatus = ConnectionStatus.closed;
-        socketNotifier!
-            .notifyClose(Close("Connection Closed", socket!.closeCode));
-      }, cancelOnError: true,);
+      socket!.listen(
+        (data) {
+          socketNotifier!.notifyData(data);
+        },
+        onError: (err) {
+          socketNotifier!.notifyError(Close(err.toString(), 1005));
+        },
+        onDone: () {
+          connectionStatus = ConnectionStatus.closed;
+          socketNotifier!
+              .notifyClose(Close("Connection Closed", socket!.closeCode));
+        },
+        cancelOnError: true,
+      );
       return;
     } on SocketException catch (e) {
       connectionStatus = ConnectionStatus.closed;
@@ -131,7 +136,8 @@ class BaseWebSocket {
       var client = HttpClient(context: SecurityContext());
       client.badCertificateCallback = (cert, host, port) {
         Get.log(
-            "BaseWebSocket: Allow self-signed certificate => $host:$port. ",);
+          "BaseWebSocket: Allow self-signed certificate => $host:$port. ",
+        );
         return true;
       };
 

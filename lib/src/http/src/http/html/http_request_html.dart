@@ -109,8 +109,9 @@ class HttpRequestImpl implements IClient {
 
     xhr.onError.first.then((_) {
       completer.completeError(
-          GetHttpException("XMLHttpRequest error.", request.url),
-          StackTrace.current,);
+        GetHttpException("XMLHttpRequest error.", request.url),
+        StackTrace.current,
+      );
     });
 
     xhr.send(bytes);

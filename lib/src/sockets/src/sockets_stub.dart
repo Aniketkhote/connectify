@@ -20,7 +20,6 @@ import "package:connectify/src/sockets/src/socket_notifier.dart";
 /// socket.send('Hello, WebSocket!');
 /// ```
 class BaseWebSocket {
-
   /// Creates a new instance of [BaseWebSocket].
   ///
   /// The [url] parameter specifies the WebSocket server URL.

@@ -9,7 +9,6 @@ import "package:refreshed/get_core/get_core.dart";
 
 /// A class for managing WebSocket connections.
 class BaseWebSocket {
-
   /// Constructs a [BaseWebSocket] with the given [url], [ping] interval, and [allowSelfSigned] flag.
   BaseWebSocket(
     this.url, {
@@ -21,6 +20,7 @@ class BaseWebSocket {
         ? url.replaceAll("https:", "wss:")
         : url.replaceAll("http:", "ws:");
   }
+
   /// The URL of the WebSocket server.
   String url;
 

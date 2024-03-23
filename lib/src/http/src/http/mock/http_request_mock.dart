@@ -13,12 +13,12 @@ typedef MockClientHandler = Future<Response> Function(Request request);
 
 /// A mock HTTP client for testing purposes that allows custom handling of requests and responses.
 class MockClient extends IClient {
-
   /// Creates a [MockClient] with a handler function that receives [Request]s and sends [Response]s.
   ///
   /// The [_handler] parameter is a function that defines the behavior of the client by transforming
   /// incoming requests and generating corresponding responses.
   MockClient(this._handler);
+
   /// The handler function that transforms requests and generates responses.
   final MockClientHandler _handler;
 

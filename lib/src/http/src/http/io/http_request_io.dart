@@ -10,7 +10,6 @@ import "package:connectify/src/http/src/response/response.dart";
 
 /// A `dart:io` implementation of `IClient`.
 class HttpRequestImpl extends IClient {
-
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
     List<TrustedCertificate>? trustedCertificates,

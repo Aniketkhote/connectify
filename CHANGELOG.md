@@ -1,8 +1,12 @@
+## 1.2.1
+
+- Fixed linting issues related.
+
 ## 1.2.0
 
 - Refactored code for improved readability and maintainability.
 - Added explicit data types to enhance code clarity and type safety.
-- Resolved a bug that previously hindered the utilization of the base URL in HTTP requests when not explicitly provided in the request URLs.
+- Fixed bug preventing base URL utilization in HTTP requests without explicit URL.
 - Refreshed upgraded to 2.5.1
 
 ## 1.1.3

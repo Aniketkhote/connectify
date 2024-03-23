@@ -100,7 +100,8 @@ class HttpStatus {
       between(internalServerError, networkConnectTimeoutError);
 
   /// Checks if the status code falls within the range specified by [begin] and [end].
-  bool between(int begin, int end) => !connectionError && code! >= begin && code! <= end;
+  bool between(int begin, int end) =>
+      !connectionError && code! >= begin && code! <= end;
 
   /// Returns `true` if the status code is within the range of successful status codes (200-299).
   bool get isOk => between(200, 299);

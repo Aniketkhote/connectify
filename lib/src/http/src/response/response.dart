@@ -10,7 +10,6 @@ import "package:connectify/src/http/src/status/http_status.dart";
 /// This class extends [Response] and adds an additional field, [graphQLErrors],
 /// to handle errors specific to GraphQL queries or mutations.
 class GraphQLResponse<T> extends Response<T> {
-
   /// Constructs a new [GraphQLResponse] instance.
   ///
   /// The [graphQLErrors] parameter represents any errors returned by the GraphQL server.
@@ -23,13 +22,15 @@ class GraphQLResponse<T> extends Response<T> {
   GraphQLResponse.fromResponse(Response res)
       : graphQLErrors = null,
         super(
-            request: res.request,
-            statusCode: res.statusCode,
-            bodyBytes: res.bodyBytes,
-            bodyString: res.bodyString,
-            statusText: res.statusText,
-            headers: res.headers,
-            body: res.body["data"] as T?,);
+          request: res.request,
+          statusCode: res.statusCode,
+          bodyBytes: res.bodyBytes,
+          bodyString: res.bodyString,
+          statusText: res.statusText,
+          headers: res.headers,
+          body: res.body["data"] as T?,
+        );
+
   /// List of GraphQL errors returned in the response.
   final List<GraphQLError>? graphQLErrors;
 }
@@ -57,15 +58,16 @@ class Response<T> {
     String? statusText,
     Map<String, String>? headers,
     T? body,
-  }) => Response<T>(
-      request: request ?? this.request,
-      statusCode: statusCode ?? this.statusCode,
-      bodyBytes: bodyBytes ?? this.bodyBytes,
-      bodyString: bodyString ?? this.bodyString,
-      statusText: statusText ?? this.statusText,
-      headers: headers ?? this.headers,
-      body: body ?? this.body,
-    );
+  }) =>
+      Response<T>(
+        request: request ?? this.request,
+        statusCode: statusCode ?? this.statusCode,
+        bodyBytes: bodyBytes ?? this.bodyBytes,
+        bodyString: bodyString ?? this.bodyString,
+        statusText: statusText ?? this.statusText,
+        headers: headers ?? this.headers,
+        body: body ?? this.body,
+      );
 
   /// The Http [Request] linked with this [Response].
   final Request? request;
@@ -109,7 +111,10 @@ class Response<T> {
 
 /// Converts a stream of bytes into a string using the specified encoding.
 Future<String> bodyBytesToString(
-    Stream<List<int>> bodyBytes, Map<String, String> headers,) => bodyBytes.bytesToString(_encodingForHeaders(headers));
+  Stream<List<int>> bodyBytes,
+  Map<String, String> headers,
+) =>
+    bodyBytes.bytesToString(_encodingForHeaders(headers));
 
 /// Returns the encoding to use for a response with the given headers.
 ///
@@ -140,7 +145,6 @@ HeaderValue _contentTypeForHeaders(Map<String, String> headers) {
 ///
 /// This class provides methods to parse and manipulate header values.
 class HeaderValue {
-
   HeaderValue([this._value = "", Map<String, String>? parameters]) {
     if (parameters != null) {
       _parameters = HashMap<String, String>.from(parameters);
@@ -150,10 +154,12 @@ class HeaderValue {
   Map<String, String?>? _parameters;
   Map<String, String?>? _unmodifiableParameters;
 
-  static HeaderValue parse(String value,
-      {String parameterSeparator = ";",
-      String? valueSeparator,
-      bool preserveBackslash = false,}) {
+  static HeaderValue parse(
+    String value, {
+    String parameterSeparator = ";",
+    String? valueSeparator,
+    bool preserveBackslash = false,
+  }) {
     var result = HeaderValue();
     result._parse(value, parameterSeparator, valueSeparator, preserveBackslash);
     return result;
@@ -187,8 +193,12 @@ class HeaderValue {
     return stringBuffer.toString();
   }
 
-  void _parse(String value, String parameterSeparator, String? valueSeparator,
-      bool preserveBackslash,) {
+  void _parse(
+    String value,
+    String parameterSeparator,
+    String? valueSeparator,
+    bool preserveBackslash,
+  ) {
     var index = 0;
 
     bool done() => index == value.length;

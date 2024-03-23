@@ -10,7 +10,6 @@ import "package:connectify/src/http/src/multipart/form_data.dart";
 /// This class encapsulates details of an HTTP request, including the request method,
 /// URL, headers, body, and other relevant properties.
 class Request<T> {
-
   /// Constructs a new [Request] instance.
   factory Request({
     required Uri url,
@@ -29,17 +28,18 @@ class Request<T> {
       assert(maxRedirects > 0);
     }
     return Request._(
-        url: url,
-        method: method,
-        bodyBytes: bodyBytes ??= <int>[].toStream(),
-        headers: Map.from(headers),
-        followRedirects: followRedirects,
-        maxRedirects: maxRedirects,
-        contentLength: contentLength,
-        files: files,
-        persistentConnection: persistentConnection,
-        decoder: decoder,
-        responseInterceptor: responseInterceptor,);
+      url: url,
+      method: method,
+      bodyBytes: bodyBytes ??= <int>[].toStream(),
+      headers: Map.from(headers),
+      followRedirects: followRedirects,
+      maxRedirects: maxRedirects,
+      contentLength: contentLength,
+      files: files,
+      persistentConnection: persistentConnection,
+      decoder: decoder,
+      responseInterceptor: responseInterceptor,
+    );
   }
 
   const Request._({
@@ -55,6 +55,7 @@ class Request<T> {
     required this.decoder,
     this.responseInterceptor,
   });
+
   /// Headers attach to this [Request]
   final Map<String, String> headers;
 
@@ -110,17 +111,18 @@ class Request<T> {
     }
 
     return Request<T>._(
-        url: url ?? this.url,
-        method: method ?? this.method,
-        bodyBytes: bodyBytes ?? this.bodyBytes,
-        headers: headers == null ? this.headers : Map.from(headers),
-        followRedirects: followRedirects ?? this.followRedirects,
-        maxRedirects: maxRedirects ?? this.maxRedirects,
-        contentLength: contentLength ?? this.contentLength,
-        files: files ?? this.files,
-        persistentConnection: persistentConnection ?? this.persistentConnection,
-        decoder: decoder ?? this.decoder,
-        responseInterceptor: responseInterceptor ?? this.responseInterceptor,);
+      url: url ?? this.url,
+      method: method ?? this.method,
+      bodyBytes: bodyBytes ?? this.bodyBytes,
+      headers: headers == null ? this.headers : Map.from(headers),
+      followRedirects: followRedirects ?? this.followRedirects,
+      maxRedirects: maxRedirects ?? this.maxRedirects,
+      contentLength: contentLength ?? this.contentLength,
+      files: files ?? this.files,
+      persistentConnection: persistentConnection ?? this.persistentConnection,
+      decoder: decoder ?? this.decoder,
+      responseInterceptor: responseInterceptor ?? this.responseInterceptor,
+    );
   }
 }
 
@@ -140,10 +142,12 @@ extension BodyBytesStream on Stream<List<int>> {
         Uint8List.fromList(bytes),
       ),
     );
-    listen((val) => sink.add(val),
-        onError: completer.completeError,
-        onDone: sink.close,
-        cancelOnError: true,);
+    listen(
+      (val) => sink.add(val),
+      onError: completer.completeError,
+      onDone: sink.close,
+      cancelOnError: true,
+    );
     return completer.future;
   }
 

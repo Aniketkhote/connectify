@@ -11,7 +11,6 @@ typedef OpenSocket = void Function();
 
 /// Wrapper class to message and reason from SocketNotifier
 class Close {
-
   Close(this.message, this.reason);
   final String? message;
   final int? reason;

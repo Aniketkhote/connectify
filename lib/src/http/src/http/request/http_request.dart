@@ -22,9 +22,10 @@ HttpRequestImpl createHttp({
   List<TrustedCertificate>? trustedCertificates,
   bool withCredentials = false,
   String Function(Uri url)? findProxy,
-}) => HttpRequestImpl(
-    allowAutoSignedCert: allowAutoSignedCert,
-    trustedCertificates: trustedCertificates,
-    withCredentials: withCredentials,
-    findProxy: findProxy,
-  );
+}) =>
+    HttpRequestImpl(
+      allowAutoSignedCert: allowAutoSignedCert,
+      trustedCertificates: trustedCertificates,
+      withCredentials: withCredentials,
+      findProxy: findProxy,
+    );
